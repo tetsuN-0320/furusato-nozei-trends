@@ -69,7 +69,7 @@ python scripts/build_site.py
 ### ローカル確認
 
 ```bash
-cd web && python -m http.server 8765
+cd docs && python -m http.server 8765
 # → http://localhost:8765/ をブラウザで開く
 ```
 

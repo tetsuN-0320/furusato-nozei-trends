@@ -34,7 +34,7 @@ DATA_DIR = _PROJECT_ROOT / "data"
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
 ANALYSIS_DIR = DATA_DIR / "analysis"
-WEB_DATA_DIR = _PROJECT_ROOT / "web" / "static" / "data"
+WEB_DATA_DIR = _PROJECT_ROOT / "docs" / "static" / "data"
 CONFIG_DIR = _PROJECT_ROOT / "config"
 
 # SQLite キャッシュのパス
