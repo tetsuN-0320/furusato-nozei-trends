@@ -1,0 +1,58 @@
+[
+  {
+    "segment": "〜5千円",
+    "count": 967,
+    "share_pct": 3.0,
+    "median_reviews": 7.0,
+    "total_reviews": 54139,
+    "avg_rating": 4.5
+  },
+  {
+    "segment": "5千〜1万円",
+    "count": 6725,
+    "share_pct": 20.9,
+    "median_reviews": 6.0,
+    "total_reviews": 529682,
+    "avg_rating": 4.52
+  },
+  {
+    "segment": "1〜2万円",
+    "count": 13119,
+    "share_pct": 40.7,
+    "median_reviews": 5.0,
+    "total_reviews": 412517,
+    "avg_rating": 4.53
+  },
+  {
+    "segment": "2〜3万円",
+    "count": 3852,
+    "share_pct": 11.9,
+    "median_reviews": 3.0,
+    "total_reviews": 66681,
+    "avg_rating": 4.51
+  },
+  {
+    "segment": "3〜5万円",
+    "count": 2844,
+    "share_pct": 8.8,
+    "median_reviews": 1.5,
+    "total_reviews": 25036,
+    "avg_rating": 4.51
+  },
+  {
+    "segment": "5〜10万円",
+    "count": 2268,
+    "share_pct": 7.0,
+    "median_reviews": 1.0,
+    "total_reviews": 10901,
+    "avg_rating": 4.48
+  },
+  {
+    "segment": "10万円〜",
+    "count": 2469,
+    "share_pct": 7.7,
+    "median_reviews": 0.0,
+    "total_reviews": 4047,
+    "avg_rating": 4.47
+  }
+]

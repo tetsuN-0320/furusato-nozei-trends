@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ふるさと納税 返礼品トレンド分析 | Portfolio by Tetsu Nakae</title>
+  <meta name="description" content="楽天ふるさと納税の返礼品データを分析。カテゴリ別人気構造・価格帯戦略・自治体タイプを可視化したインタラクティブダッシュボード。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/main.css">
+</head>
+<body>
+
+<!-- ヘッダー -->
+<header class="site-header">
+  <h1>🍱 ふるさと納税 返礼品トレンド分析</h1>
+  <nav>
+    <a href="./index.html">ダッシュボード</a>
+    <a href="./about.html">About</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- KPIカード -->
+  <section class="kpi-grid" id="kpi-section">
+    <div class="kpi-card">
+      <div class="label">分析対象 商品数</div>
+      <div class="value" id="kpi-products">—</div>
+      <div class="sub">楽天ふるさと納税 掲載商品</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">参加自治体数</div>
+      <div class="value" id="kpi-municipalities">—</div>
+      <div class="sub">楽天に出店している自治体</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">主要カテゴリ数</div>
+      <div class="value" id="kpi-categories">—</div>
+      <div class="sub">正規化後のカテゴリ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">平均レビュースコア</div>
+      <div class="value" id="kpi-rating">—</div>
+      <div class="sub">/ 5.0（レビューあり商品）</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">価格の中央値</div>
+      <div class="value" id="kpi-median-price">—</div>
+      <div class="sub">全カテゴリ合計</div>
+    </div>
+  </section>
+
+  <!-- インサイトバナー -->
+  <section class="insight-banner">
+    <h2>主な発見（EC・マーケティング視点）</h2>
+    <ul class="insights-list" id="insights-list"></ul>
+  </section>
+
+  <!-- フィルターバー -->
+  <section class="filter-bar">
+    <div class="filter-group">
+      <label for="filter-category">カテゴリ</label>
+      <select id="filter-category">
+        <option value="all">すべてのカテゴリ</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-price">価格帯</label>
+      <select id="filter-price">
+        <option value="all">すべての価格帯</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-cluster">自治体タイプ</label>
+      <select id="filter-cluster">
+        <option value="all">すべてのタイプ</option>
+      </select>
+    </div>
+    <button class="btn-reset" id="btn-reset">リセット</button>
+  </section>
+
+  <!-- チャート行 1: カテゴリ & 価格帯 -->
+  <section class="chart-grid">
+    <div class="chart-card">
+      <h2>カテゴリ別 商品件数</h2>
+      <p class="chart-desc">食品（魚・肉・果物）が全体の過半数を占める</p>
+      <div id="chart-category" class="chart-placeholder">
+        <div class="loading" id="loading-msg">データを読み込み中...</div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h2>価格帯別 構成比</h2>
+      <p class="chart-desc">1〜2万円帯が最多。5千〜1万円帯もボリュームゾーン</p>
+      <div id="chart-price" class="chart-placeholder"></div>
+    </div>
+  </section>
+
+  <!-- チャート行 2: 散布図 -->
+  <section class="chart-grid full">
+    <div class="chart-card">
+      <h2>価格 × レビュー数（カテゴリ別）</h2>
+      <p class="chart-desc">価格・カテゴリとレビュー獲得力の関係。ログスケール表示。点をホバーで詳細表示</p>
+      <div id="chart-scatter" class="chart-placeholder"></div>
+    </div>
+  </section>
+
+  <!-- チャート行 3: クラスター -->
+  <section class="chart-grid">
+    <div class="chart-card">
+      <h2>自治体タイプ別 分布（K-means）</h2>
+      <p class="chart-desc">食品特化型 vs 家電・汎用品型の二極化が鮮明</p>
+      <div id="chart-cluster" class="chart-placeholder"></div>
+    </div>
+    <div class="chart-card">
+      <h2>自治体タイプの定義</h2>
+      <p class="chart-desc">5つのタイプの特徴と代表的な戦略</p>
+      <div style="padding:8px 0">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>タイプ</th>
+              <th>特徴</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge badge-food-cheap">食品コスパ型</span></td><td>食品比率70%超、中価格帯中心</td></tr>
+            <tr><td><span class="badge badge-food-prem">食品プレミアム型</span></td><td>食品特化×高単価×高評価</td></tr>
+            <tr><td><span class="badge badge-elec">家電・高額品特化型</span></td><td>高額品比率30%超、食品比率低め</td></tr>
+            <tr><td><span class="badge badge-large">大規模総合型</span></td><td>受入額が特に大きい大手自治体</td></tr>
+            <tr><td><span class="badge badge-small">汎用・小規模型</span></td><td>商品数少なめ、分類が難しい自治体</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 自治体ランキングテーブル -->
+  <section class="table-card">
+    <h2>自治体別 ランキング <span id="muni-count" style="font-weight:400;font-size:12px;color:#6c757d"></span></h2>
+    <div style="overflow-x:auto">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>自治体名</th>
+            <th>商品数</th>
+            <th>中央価格</th>
+            <th>レビュー数計</th>
+            <th>平均評価</th>
+            <th>主力カテゴリ</th>
+            <th>タイプ</th>
+            <th>受入額（総務省）</th>
+          </tr>
+        </thead>
+        <tbody id="muni-tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- フッター -->
+<footer class="site-footer">
+  <p>
+    データソース: <a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener">楽天ウェブサービス</a>・
+    <a href="https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/archive/" target="_blank" rel="noopener">総務省「ふるさと納税に関する現況調査結果」</a>
+    ／ 楽天規約に基づき、集計値・統計値のみを表示しています（個別商品データ非公開）。<br>
+    制作: <strong>中江 哲夫</strong> — <a href="./about.html">About / 分析手法</a>
+  </p>
+</footer>
+
+<!-- Plotly.js (CDN) -->
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<!-- ダッシュボード JS -->
+<script src="./static/js/dashboard.js"></script>
+<script src="./static/js/charts.js"></script>
+<script src="./static/js/table.js"></script>
+
+</body>
+</html>

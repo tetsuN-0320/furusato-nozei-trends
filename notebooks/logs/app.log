@@ -1,0 +1,4 @@
+2026-05-05 13:38:05.020 | INFO     | src.api.soumu_loader:load_soumu_csv:56 - CSVロード: 1890 行 × 33 列
+2026-05-05 13:38:05.087 | INFO     | src.api.soumu_loader:load_soumu_csv:89 - 総務省データ読み込み完了 (令和４年度): 1,741 自治体
+2026-05-07 14:24:36.646 | INFO     | src.api.soumu_loader:load_soumu_csv:56 - CSVロード: 1890 行 × 33 列
+2026-05-07 14:24:36.663 | INFO     | src.api.soumu_loader:load_soumu_csv:89 - 総務省データ読み込み完了 (令和４年度): 1,741 自治体

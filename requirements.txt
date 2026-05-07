@@ -1,0 +1,37 @@
+# === API・HTTP ===
+requests>=2.31.0
+python-dotenv>=1.0.0
+tenacity>=8.2.0          # リトライ処理
+
+# === データ処理 ===
+pandas>=2.1.0
+numpy>=1.26.0
+pyarrow>=14.0.0
+pyjanitor>=0.26.0
+pyyaml>=6.0.1            # カテゴリマッピング YAML 読込
+
+# === 自然言語処理（カテゴリ正規化） ===
+sudachipy>=0.6.7         # 日本語形態素解析
+sudachidict-core>=20240109
+
+# === 分析・機械学習 ===
+scikit-learn>=1.3.0      # クラスタリング（自治体タイプ分類）
+scipy>=1.11.0            # 統計検定
+
+# === 可視化 ===
+plotly>=5.17.0
+statsmodels>=0.14.0   # plotly trendline='ols' に必要
+kaleido>=0.2.1
+geopandas>=0.14.0        # 自治体境界データ操作
+matplotlib>=3.8.0
+
+# === 開発ツール ===
+jupyter>=1.0.0
+ipywidgets>=8.1.0
+black>=23.10.0
+ruff>=0.1.5
+pytest>=7.4.0
+mypy>=1.6.0
+
+# === ロギング ===
+loguru>=0.7.2

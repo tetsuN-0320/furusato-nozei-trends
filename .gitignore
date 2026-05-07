@@ -1,0 +1,71 @@
+# === 環境変数・APIキー（絶対にコミットしない） ===
+.env
+*.env
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# === 仮想環境 ===
+.venv/
+venv/
+ENV/
+env/
+
+# === Jupyter ===
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# === データファイル（生データは再取得可能なのでコミット対象外） ===
+data/raw/rakuten_cache.sqlite
+data/raw/*.csv
+data/raw/*.json
+data/processed/*.parquet
+data/analysis/*.parquet
+
+# ただし構造を示す .gitkeep はコミット対象
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/analysis/.gitkeep
+
+# === OS ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V8
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# === IDE ===
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# === テスト・カバレッジ ===
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/

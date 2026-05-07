@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | ふるさと納税 返礼品トレンド分析</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/main.css">
+  <style>
+    .about-section { background:#fff; border-radius:8px; padding:28px 32px; box-shadow:0 2px 8px rgba(0,0,0,.08); margin-bottom:24px; }
+    .about-section h2 { color:#023e7d; font-size:16px; margin-bottom:16px; padding-bottom:8px; border-bottom:2px solid #e85d04; }
+    .about-section h3 { font-size:14px; color:#212529; margin:16px 0 8px; }
+    .about-section p, .about-section li { font-size:13px; line-height:1.8; margin-bottom:8px; }
+    .about-section ul { padding-left:20px; }
+    .about-section table { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+    .about-section th { background:#f8f9fa; padding:8px 12px; border:1px solid #dee2e6; text-align:left; font-weight:600; }
+    .about-section td { padding:8px 12px; border:1px solid #dee2e6; vertical-align:top; }
+    .profile-grid { display:grid; grid-template-columns:auto 1fr; gap:24px; align-items:start; }
+    .profile-text p { margin-bottom:6px; }
+    code { background:#f8f9fa; padding:2px 6px; border-radius:4px; font-size:12px; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>🍱 ふるさと納税 返礼品トレンド分析</h1>
+  <nav>
+    <a href="./index.html">ダッシュボード</a>
+    <a href="./about.html">About</a>
+  </nav>
+</header>
+
+<main class="container" style="max-width:900px">
+
+  <!-- プロジェクト概要 -->
+  <section class="about-section">
+    <h2>プロジェクト概要</h2>
+    <p>
+      本プロジェクトは、楽天ふるさと納税に掲載されている返礼品データと、総務省「ふるさと納税に関する現況調査」（令和4年度）を組み合わせて、
+      ふるさと納税市場の人気構造・価格戦略・自治体戦略を可視化した分析ダッシュボードです。
+    </p>
+    <p>
+      制作者の中江哲夫は、電通ヤング＆ルビカムでのブランドリサーチ・ディレクター経験と、
+      ダイアローグ研究所でのEコマース事業開発・マーケティングコンサルティングの実務経験を持ちます。
+      本作品は「事業視点を持ったデータアナリスト」としての差別化を示すポートフォリオ第2作です。
+    </p>
+  </section>
+
+  <!-- データソース -->
+  <section class="about-section">
+    <h2>データソース</h2>
+    <table>
+      <thead>
+        <tr><th>データ</th><th>出典</th><th>取得時期</th><th>件数</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>楽天ふるさと納税 返礼品データ</td>
+          <td><a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener">楽天ウェブサービス（楽天市場商品検索API）</a></td>
+          <td>2026年5月</td>
+          <td>32,244件</td>
+        </tr>
+        <tr>
+          <td>ふるさと納税の現況調査</td>
+          <td><a href="https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/archive/" target="_blank" rel="noopener">総務省「ふるさと納税に関する現況調査結果」令和4年度</a></td>
+          <td>令和4年度調査</td>
+          <td>1,741自治体</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 楽天API利用規約の遵守 -->
+  <section class="about-section">
+    <h2>楽天API利用規約への準拠</h2>
+    <p>
+      本ダッシュボードは、楽天ウェブサービス利用規約を遵守して構築されています。
+      具体的には以下の点を厳守しています。
+    </p>
+    <ul>
+      <li>取得した個別商品データの再配布は行いません。ダッシュボードには<strong>集計値・統計値のみ</strong>を表示しています</li>
+      <li>商品名・商品画像・ショップ情報の個別表示は行っていません</li>
+      <li>APIのレート制限（1リクエスト/秒、30,000リクエスト/日）を遵守しています</li>
+      <li>データ取得には SQLite キャッシュを使用し、不要な再取得を防止しています</li>
+    </ul>
+    <p style="margin-top:12px">
+      本サイトに掲載しているデータは、<a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener">楽天ウェブサービス</a>を利用して収集・加工したものです。
+    </p>
+  </section>
+
+  <!-- 分析手法 -->
+  <section class="about-section">
+    <h2>分析手法</h2>
+
+    <h3>1. カテゴリ正規化</h3>
+    <p>
+      楽天APIの検索キーワード（「ふるさと納税 牛肉」等）と商品名・説明文から、
+      sudachipy（日本語形態素解析）と YAML マッピングルール（<code>config/category_mapping.yml</code>）を組み合わせて
+      14の主要カテゴリに正規化しました。
+    </p>
+
+    <h3>2. 価格帯セグメント</h3>
+    <p>
+      返礼品の寄付金額を7つの価格帯に分割し、各帯のボリューム・レビュー獲得力を比較。
+      「心理的価格ポイント」（1万円・3万円・5万円）への集中度も分析しています。
+    </p>
+
+    <h3>3. 自治体タイプ分類（K-means）</h3>
+    <p>
+      各自治体のショップを「商品数・価格中央値・レビュー数・食品比率・高額品比率・受入額」の6次元特徴量でベクトル化し、
+      K-means（k=5）でクラスタリングを実施。StandardScaler で標準化後にクラスタリングしています。
+    </p>
+
+    <h3>4. 楽天・総務省データの突合</h3>
+    <p>
+      楽天のショップ名（例: 「北海道別海町」）と総務省の「都道府県名+市区町村名」を
+      部分一致マッチングで突合。突合率は99.5%を達成しています。
+    </p>
+  </section>
+
+  <!-- 制作者 -->
+  <section class="about-section">
+    <h2>制作者プロフィール</h2>
+    <div class="profile-grid">
+      <div class="profile-text">
+        <p><strong>中江 哲夫（Tetsu Nakae）</strong></p>
+        <p>株式会社ダイアローグ研究所 代表取締役</p>
+        <p style="margin-top:8px; color:#6c757d">
+          慶應義塾大学法学部政治学科卒。大日本印刷、電通ヤング＆ルビカム（ブランドリサーチ・ディレクター）を経て、
+          2008年よりEコマース事業開発・マーケティングコンサルティングに従事。
+        </p>
+        <p style="margin-top:8px; color:#6c757d">
+          保有資格: Python エンジニア認定（基礎・データ分析）、Google Data Analytics プロフェッショナル認定、
+          データ分析マスター認定、基本情報技術者、通販エキスパート検定1級 他
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技術スタック -->
+  <section class="about-section">
+    <h2>使用技術</h2>
+    <table>
+      <thead>
+        <tr><th>カテゴリ</th><th>ライブラリ / ツール</th><th>用途</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>データ取得</td><td>requests, tenacity</td><td>楽天API呼び出し・リトライ</td></tr>
+        <tr><td>キャッシュ</td><td>SQLite</td><td>API レスポンスのキャッシュ</td></tr>
+        <tr><td>データ処理</td><td>pandas, pyarrow</td><td>前処理・集計・parquet出力</td></tr>
+        <tr><td>日本語NLP</td><td>sudachipy</td><td>商品名トークナイズ・カテゴリ正規化</td></tr>
+        <tr><td>機械学習</td><td>scikit-learn</td><td>K-means クラスタリング</td></tr>
+        <tr><td>可視化</td><td>Plotly.js</td><td>インタラクティブチャート</td></tr>
+        <tr><td>フロントエンド</td><td>Vanilla JS / CSS</td><td>ダッシュボード UI</td></tr>
+        <tr><td>ホスティング</td><td>GitHub Pages</td><td>静的サイト公開</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px">
+      ソースコード: <a href="https://github.com/tetsuN-0320/furusato-nozei-trends" target="_blank" rel="noopener">GitHub</a>
+    </p>
+  </section>
+
+  <!-- 免責事項 -->
+  <section class="about-section">
+    <h2>免責事項</h2>
+    <ul>
+      <li>本ダッシュボードの分析結果はポートフォリオ目的のものであり、投資・事業判断の根拠としての利用は推奨しません</li>
+      <li>還元率の推定値はあくまで参考値です。実際の市場価格との差異が生じる場合があります</li>
+      <li>楽天APIのデータは取得時点のものであり、現在の掲載状況と異なる場合があります</li>
+      <li>総務省データは令和4年度（2022年度）の調査に基づきます</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>
+    データソース: <a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener">楽天ウェブサービス</a>・
+    <a href="https://www.soumu.go.jp/main_sosiki/jichi_zeisei/czaisei/czaisei_seido/furusato/archive/" target="_blank" rel="noopener">総務省「ふるさと納税に関する現況調査結果」</a>
+    ／ 楽天規約に基づき、集計値・統計値のみを表示しています。<br>
+    制作: <strong>中江 哲夫</strong>
+  </p>
+</footer>
+
+</body>
+</html>

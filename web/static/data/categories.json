@@ -1,0 +1,142 @@
+[
+  {
+    "category": "魚介類",
+    "count": 6069,
+    "share_pct": 18.8,
+    "median_price": 15500,
+    "avg_price": 32279,
+    "total_reviews": 309800,
+    "median_reviews": 4.0,
+    "avg_rating": 4.45
+  },
+  {
+    "category": "牛肉",
+    "count": 4531,
+    "share_pct": 14.1,
+    "median_price": 15000,
+    "avg_price": 24173,
+    "total_reviews": 268162,
+    "median_reviews": 6.0,
+    "avg_rating": 4.51
+  },
+  {
+    "category": "果物",
+    "count": 3647,
+    "share_pct": 11.3,
+    "median_price": 13000,
+    "avg_price": 18389,
+    "total_reviews": 175683,
+    "median_reviews": 8.0,
+    "avg_rating": 4.39
+  },
+  {
+    "category": "旅行・体験",
+    "count": 2404,
+    "share_pct": 7.5,
+    "median_price": 50000,
+    "avg_price": 123926,
+    "total_reviews": 9045,
+    "median_reviews": 1.0,
+    "avg_rating": 4.56
+  },
+  {
+    "category": "その他",
+    "count": 2358,
+    "share_pct": 7.3,
+    "median_price": 21000,
+    "avg_price": 98743,
+    "total_reviews": 15081,
+    "median_reviews": 1.0,
+    "avg_rating": 4.54
+  },
+  {
+    "category": "家電・電気製品",
+    "count": 2297,
+    "share_pct": 7.1,
+    "median_price": 53000,
+    "avg_price": 176919,
+    "total_reviews": 21709,
+    "median_reviews": 0.0,
+    "avg_rating": 4.41
+  },
+  {
+    "category": "米・穀物",
+    "count": 2269,
+    "share_pct": 7.0,
+    "median_price": 14500,
+    "avg_price": 22615,
+    "total_reviews": 90555,
+    "median_reviews": 6.0,
+    "avg_rating": 4.65
+  },
+  {
+    "category": "日用品・生活雑貨",
+    "count": 2050,
+    "share_pct": 6.4,
+    "median_price": 16000,
+    "avg_price": 67230,
+    "total_reviews": 41882,
+    "median_reviews": 2.0,
+    "avg_rating": 4.57
+  },
+  {
+    "category": "鶏肉",
+    "count": 2003,
+    "share_pct": 6.2,
+    "median_price": 13000,
+    "avg_price": 36565,
+    "total_reviews": 52161,
+    "median_reviews": 1.0,
+    "avg_rating": 4.57
+  },
+  {
+    "category": "酒・飲料",
+    "count": 1516,
+    "share_pct": 4.7,
+    "median_price": 15000,
+    "avg_price": 21160,
+    "total_reviews": 33972,
+    "median_reviews": 5.0,
+    "avg_rating": 4.71
+  },
+  {
+    "category": "野菜",
+    "count": 1397,
+    "share_pct": 4.3,
+    "median_price": 11000,
+    "avg_price": 15830,
+    "total_reviews": 22211,
+    "median_reviews": 3.0,
+    "avg_rating": 4.5
+  },
+  {
+    "category": "豚肉",
+    "count": 1376,
+    "share_pct": 4.3,
+    "median_price": 12000,
+    "avg_price": 16315,
+    "total_reviews": 54455,
+    "median_reviews": 4.0,
+    "avg_rating": 4.56
+  },
+  {
+    "category": "加工食品・惣菜",
+    "count": 228,
+    "share_pct": 0.7,
+    "median_price": 12000,
+    "avg_price": 16977,
+    "total_reviews": 5510,
+    "median_reviews": 2.0,
+    "avg_rating": 4.51
+  },
+  {
+    "category": "スイーツ・菓子",
+    "count": 99,
+    "share_pct": 0.3,
+    "median_price": 11000,
+    "avg_price": 13490,
+    "total_reviews": 2777,
+    "median_reviews": 3.0,
+    "avg_rating": 4.71
+  }
+]
