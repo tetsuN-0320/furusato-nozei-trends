@@ -142,9 +142,13 @@ async function init() {
       state.filter = { category: "all", priceSegment: "all", clusterLabel: "all" };
       renderAll();
     });
+    // ローディング表示を非表示にする
+    const loadingMsg = document.getElementById("loading-msg");
+    if (loadingMsg) loadingMsg.style.display = "none";
   } catch (e) {
     console.error("データ読み込みエラー:", e);
-    document.getElementById("loading-msg").textContent = "データの読み込みに失敗しました。";
+    const loadingMsg = document.getElementById("loading-msg");
+    if (loadingMsg) loadingMsg.textContent = "データの読み込みに失敗しました。";
   }
 }
 
