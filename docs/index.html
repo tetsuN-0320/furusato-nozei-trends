@@ -11,7 +11,6 @@
 </head>
 <body>
 
-<!-- ヘッダー -->
 <header class="site-header">
   <h1>🍱 ふるさと納税 返礼品トレンド分析</h1>
   <nav>
@@ -57,7 +56,7 @@
     <ul class="insights-list" id="insights-list"></ul>
   </section>
 
-  <!-- フィルターバー -->
+  <!-- フィルターバー（*マーク付きグラフに適用） -->
   <section class="filter-bar">
     <div class="filter-group">
       <label for="filter-category">カテゴリ</label>
@@ -66,10 +65,14 @@
       </select>
     </div>
     <div class="filter-group">
-      <label for="filter-price">価格帯</label>
-      <select id="filter-price">
-        <option value="all">すべての価格帯</option>
-      </select>
+      <label>評価点</label>
+      <div class="rating-checks" id="rating-checks">
+        <label class="rating-label"><input type="checkbox" class="rating-check" value="5"> ★5</label>
+        <label class="rating-label"><input type="checkbox" class="rating-check" value="4"> ★4</label>
+        <label class="rating-label"><input type="checkbox" class="rating-check" value="3"> ★3</label>
+        <label class="rating-label"><input type="checkbox" class="rating-check" value="2"> ★2</label>
+        <label class="rating-label"><input type="checkbox" class="rating-check" value="1"> ★1</label>
+      </div>
     </div>
     <div class="filter-group">
       <label for="filter-cluster">自治体タイプ</label>
@@ -78,9 +81,10 @@
       </select>
     </div>
     <button class="btn-reset" id="btn-reset">リセット</button>
+    <div class="filter-note">※ フィルターは ★ マークのグラフに適用されます</div>
   </section>
 
-  <!-- チャート行 1: カテゴリ & 価格帯 -->
+  <!-- チャート行 1: カテゴリ（フィルター対象外）& 価格帯（★） -->
   <section class="chart-grid">
     <div class="chart-card">
       <h2>カテゴリ別 商品件数</h2>
@@ -90,54 +94,39 @@
       </div>
     </div>
     <div class="chart-card">
-      <h2>価格帯別 構成比</h2>
-      <p class="chart-desc">1〜2万円帯が最多。5千〜1万円帯もボリュームゾーン</p>
+      <h2>価格帯別 構成比 ★</h2>
+      <p class="chart-desc">1〜2万円帯が最多。カテゴリ・評価点フィルター適用時は対象商品で再集計</p>
       <div id="chart-price" class="chart-placeholder"></div>
     </div>
   </section>
 
-  <!-- チャート行 2: 散布図 -->
+  <!-- チャート行 2: 価格×レビュー（★） -->
   <section class="chart-grid full">
     <div class="chart-card">
-      <h2>価格 × レビュー数（カテゴリ別）</h2>
-      <p class="chart-desc">価格・カテゴリとレビュー獲得力の関係。ログスケール表示。点をホバーで詳細表示</p>
+      <h2>価格 × レビュー数（カテゴリ別） ★</h2>
+      <p class="chart-desc">価格帯とレビュー獲得力の関係。点をホバーで詳細表示</p>
       <div id="chart-scatter" class="chart-placeholder"></div>
     </div>
   </section>
 
-  <!-- チャート行 3: クラスター -->
+  <!-- チャート行 3: 自治体散布図（★）& クラスター棒 -->
   <section class="chart-grid">
+    <div class="chart-card">
+      <h2>自治体別 レビュー数 × 平均評価 ★</h2>
+      <p class="chart-desc">右上ほど「人気かつ高評価」の自治体。バブルサイズは商品数。カテゴリ選択時は主力カテゴリで絞込</p>
+      <div id="chart-muni-scatter" class="chart-placeholder"></div>
+    </div>
     <div class="chart-card">
       <h2>自治体タイプ別 分布（K-means）</h2>
       <p class="chart-desc">食品特化型 vs 家電・汎用品型の二極化が鮮明</p>
       <div id="chart-cluster" class="chart-placeholder"></div>
     </div>
-    <div class="chart-card">
-      <h2>自治体タイプの定義</h2>
-      <p class="chart-desc">5つのタイプの特徴と代表的な戦略</p>
-      <div style="padding:8px 0">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>タイプ</th>
-              <th>特徴</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><span class="badge badge-food-cheap">食品コスパ型</span></td><td>食品比率70%超、中価格帯中心</td></tr>
-            <tr><td><span class="badge badge-food-prem">食品プレミアム型</span></td><td>食品特化×高単価×高評価</td></tr>
-            <tr><td><span class="badge badge-elec">家電・高額品特化型</span></td><td>高額品比率30%超、食品比率低め</td></tr>
-            <tr><td><span class="badge badge-large">大規模総合型</span></td><td>受入額が特に大きい大手自治体</td></tr>
-            <tr><td><span class="badge badge-small">汎用・小規模型</span></td><td>商品数少なめ、分類が難しい自治体</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
   </section>
 
-  <!-- 自治体ランキングテーブル -->
+  <!-- 自治体ランキングテーブル（★） -->
   <section class="table-card">
-    <h2>自治体別 ランキング <span id="muni-count" style="font-weight:400;font-size:12px;color:#6c757d"></span></h2>
+    <h2>自治体別 ランキング ★ <span id="muni-count" style="font-weight:400;font-size:12px;color:#6c757d"></span></h2>
+    <p style="font-size:12px;color:#6c757d;margin-bottom:10px">列見出しをクリックで昇順／降順ソート</p>
     <div style="overflow-x:auto">
       <table class="data-table">
         <thead>
@@ -146,11 +135,11 @@
             <th>自治体名</th>
             <th>商品数</th>
             <th>中央価格</th>
-            <th>レビュー数計</th>
-            <th>平均評価</th>
+            <th class="sortable" data-col="total_reviews">レビュー数計 <span class="sort-icon">↕</span></th>
+            <th class="sortable" data-col="avg_rating">平均評価 <span class="sort-icon">↕</span></th>
             <th>主力カテゴリ</th>
             <th>タイプ</th>
-            <th>受入額（総務省）</th>
+            <th class="sortable" data-col="donation_amount_oku">受入額（総務省） <span class="sort-icon">↕</span></th>
           </tr>
         </thead>
         <tbody id="muni-tbody"></tbody>
@@ -160,7 +149,6 @@
 
 </main>
 
-<!-- フッター -->
 <footer class="site-footer">
   <p>
     データソース: <a href="https://webservice.rakuten.co.jp/" target="_blank" rel="noopener">楽天ウェブサービス</a>・
@@ -170,9 +158,7 @@
   </p>
 </footer>
 
-<!-- Plotly.js (CDN) -->
 <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
-<!-- ダッシュボード JS -->
 <script src="./static/js/dashboard.js"></script>
 <script src="./static/js/charts.js"></script>
 <script src="./static/js/table.js"></script>

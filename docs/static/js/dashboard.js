@@ -1,10 +1,13 @@
 /**
  * ダッシュボード状態管理・初期化
+ *
+ * フィルター対象（★）: 価格帯構成比 / 価格×レビュー散布図 /
+ *                      レビュー×評価散布図 / 自治体散布図 / 自治体テーブル
+ * フィルター非対象: カテゴリ別商品件数 / 自治体タイプ棒グラフ
  */
 
 const DATA_BASE = "./static/data/";
 
-// グローバル状態
 const state = {
   categories: [],
   priceSegments: [],
@@ -12,9 +15,9 @@ const state = {
   scatter: [],
   summary: {},
   filter: {
-    category: "all",
-    priceSegment: "all",
-    clusterLabel: "all",
+    category: "all",       // カテゴリ名 or "all"
+    ratings: [],           // チェック済み評価点の配列（空=すべて）
+    clusterLabel: "all",   // 自治体タイプ or "all"
   },
 };
 
@@ -46,6 +49,7 @@ function renderKPIs() {
 
 // フィルター選択肢を生成
 function populateFilters() {
+  // カテゴリ
   const catSel = document.getElementById("filter-category");
   state.categories.forEach((c) => {
     const opt = document.createElement("option");
@@ -54,14 +58,7 @@ function populateFilters() {
     catSel.appendChild(opt);
   });
 
-  const priceSel = document.getElementById("filter-price");
-  state.priceSegments.forEach((p) => {
-    const opt = document.createElement("option");
-    opt.value = p.segment;
-    opt.textContent = p.segment;
-    priceSel.appendChild(opt);
-  });
-
+  // 自治体タイプ
   const clusterSel = document.getElementById("filter-cluster");
   const labels = [...new Set(state.municipalities.map((m) => m.cluster_label))].sort();
   labels.forEach((l) => {
@@ -75,32 +72,47 @@ function populateFilters() {
 // フィルター変更ハンドラー
 function onFilterChange() {
   state.filter.category = document.getElementById("filter-category").value;
-  state.filter.priceSegment = document.getElementById("filter-price").value;
   state.filter.clusterLabel = document.getElementById("filter-cluster").value;
+  state.filter.ratings = [...document.querySelectorAll(".rating-check:checked")]
+    .map((cb) => parseInt(cb.value));
   renderAll();
 }
 
 // 全チャート再描画
 function renderAll() {
-  renderCategoryBar();
-  renderPriceBar();
-  renderScatter();
-  renderClusterBar();
-  renderMunicipalityTable();
+  renderCategoryBar();         // フィルター非対象
+  renderPriceBar();            // ★
+  renderScatter();             // ★ 価格×レビュー
+  renderMunicipalityScatter(); // ★ 自治体散布図
+  renderClusterBar();          // フィルター非対象
+  renderMunicipalityTable();   // ★
 }
 
-// フィルター適用済み散布図データ取得
+// ★ フィルター適用: scatter.json（商品レベル）
+//   カテゴリ・評価点でフィルタリング
 function filteredScatter() {
+  const { category, ratings } = state.filter;
   return state.scatter.filter((d) => {
-    if (state.filter.category !== "all" && d.category !== state.filter.category) return false;
+    if (category !== "all" && d.category !== category) return false;
+    if (ratings.length > 0) {
+      if (!d.rating) return false;
+      if (!ratings.includes(Math.floor(d.rating))) return false;
+    }
     return true;
   });
 }
 
-// フィルター適用済み自治体データ取得
+// ★ フィルター適用: municipalities.json（自治体レベル）
+//   カテゴリ（主力カテゴリで絞り込み）・自治体タイプ・評価点でフィルタリング
 function filteredMunicipalities() {
+  const { category, clusterLabel, ratings } = state.filter;
   return state.municipalities.filter((m) => {
-    if (state.filter.clusterLabel !== "all" && m.cluster_label !== state.filter.clusterLabel) return false;
+    if (category !== "all" && m.main_category !== category) return false;
+    if (clusterLabel !== "all" && m.cluster_label !== clusterLabel) return false;
+    if (ratings.length > 0) {
+      if (!m.avg_rating) return false;
+      if (!ratings.includes(Math.floor(m.avg_rating))) return false;
+    }
     return true;
   });
 }
@@ -113,7 +125,7 @@ function renderInsights() {
     `最多カテゴリは「${top.category}」で全体の${top.share_pct}%（${top.count.toLocaleString()}件）を占める`,
     `返礼品の中央価格は ¥${s.median_price.toLocaleString()}。楽天市場全体より高単価な傾向`,
     `全1,497自治体のうち「食品コスパ型」が最多（62%）、次いで「家電・高額品特化型」（37%）`,
-    `平均レビュースコア ${s.avg_review_score.toFixed(2)} ／5.0 — 購入満足度は高水準`,
+    `平均レビュースコア ${s.avg_review_score.toFixed(2)} ／5.0 — レビュー数とスコアを両立する自治体が高付加価値戦略の鍵`,
   ];
   const ul = document.getElementById("insights-list");
   items.forEach((text) => {
@@ -132,17 +144,22 @@ async function init() {
     renderInsights();
     renderAll();
 
+    // フィルターイベント
     document.getElementById("filter-category").addEventListener("change", onFilterChange);
-    document.getElementById("filter-price").addEventListener("change", onFilterChange);
     document.getElementById("filter-cluster").addEventListener("change", onFilterChange);
+    document.querySelectorAll(".rating-check").forEach((cb) =>
+      cb.addEventListener("change", onFilterChange)
+    );
+
+    // リセット
     document.getElementById("btn-reset").addEventListener("click", () => {
       document.getElementById("filter-category").value = "all";
-      document.getElementById("filter-price").value = "all";
       document.getElementById("filter-cluster").value = "all";
-      state.filter = { category: "all", priceSegment: "all", clusterLabel: "all" };
+      document.querySelectorAll(".rating-check").forEach((cb) => (cb.checked = false));
+      state.filter = { category: "all", ratings: [], clusterLabel: "all" };
       renderAll();
     });
-    // ローディング表示を非表示にする
+
     const loadingMsg = document.getElementById("loading-msg");
     if (loadingMsg) loadingMsg.style.display = "none";
   } catch (e) {

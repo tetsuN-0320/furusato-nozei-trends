@@ -80,7 +80,25 @@ body {
   align-items: flex-end;
 }
 .filter-group { display: flex; flex-direction: column; gap: 4px; }
-.filter-group label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+.filter-group > label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+
+/* 評価点チェックリスト */
+.rating-checks { display: flex; gap: 6px; flex-wrap: wrap; padding: 4px 0; }
+.rating-label {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 13px; color: var(--text);
+  cursor: pointer; white-space: nowrap;
+}
+.rating-label input[type="checkbox"] { accent-color: var(--primary); cursor: pointer; }
+
+/* フィルター注記 */
+.filter-note {
+  align-self: flex-end;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding-bottom: 8px;
+  white-space: nowrap;
+}
 .filter-group select {
   padding: 7px 12px;
   border: 1px solid var(--border);
@@ -157,6 +175,13 @@ body {
   font-size: 12px;
   white-space: nowrap;
 }
+.data-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.data-table th.sortable:hover { background: var(--primary-light); color: var(--primary); }
+.data-table th.sort-active { color: var(--primary); }
+.sort-icon { font-size: 11px; opacity: .7; }
 .data-table td {
   padding: 8px 12px;
   border-bottom: 1px solid var(--border);

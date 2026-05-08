@@ -1,16 +1,18 @@
 /**
- * 自治体ランキングテーブル描画
+ * 自治体ランキングテーブル描画（ソート対応）
  */
 
 const BADGE_CLASS = {
-  "食品コスパ型": "badge-food-cheap",
-  "食品プレミアム型": "badge-food-prem",
+  "食品コスパ型":       "badge-food-cheap",
+  "食品プレミアム型":   "badge-food-prem",
   "家電・高額品特化型": "badge-elec",
-  "大規模総合型": "badge-large",
-  "汎用・小規模型": "badge-small",
+  "大規模総合型":       "badge-large",
+  "汎用・小規模型":     "badge-small",
 };
 
-// 星評価HTML（例: 4.5 → ★★★★½）
+// ソート状態
+const sortState = { col: "total_reviews", dir: "desc" };
+
 function starHTML(rating) {
   if (!rating) return '<span style="color:#ccc">—</span>';
   const full = Math.floor(rating);
@@ -19,9 +21,15 @@ function starHTML(rating) {
 }
 
 function renderMunicipalityTable() {
+  const { col, dir } = sortState;
+
   const munis = filteredMunicipalities()
     .filter((m) => m.total_reviews > 0)
-    .sort((a, b) => b.total_reviews - a.total_reviews)
+    .sort((a, b) => {
+      const va = a[col] ?? 0;
+      const vb = b[col] ?? 0;
+      return dir === "asc" ? va - vb : vb - va;
+    })
     .slice(0, 50);
 
   const tbody = document.getElementById("muni-tbody");
@@ -30,9 +38,7 @@ function renderMunicipalityTable() {
   munis.forEach((m, i) => {
     const tr = document.createElement("tr");
     const badgeClass = BADGE_CLASS[m.cluster_label] || "badge-small";
-    const donationStr = m.donation_amount_oku > 0
-      ? `${m.donation_amount_oku.toFixed(1)}億円`
-      : "—";
+    const donationStr = m.donation_amount_oku > 0 ? `${m.donation_amount_oku.toFixed(1)}億円` : "—";
 
     tr.innerHTML = `
       <td style="text-align:center;color:#999">${i + 1}</td>
@@ -48,5 +54,36 @@ function renderMunicipalityTable() {
     tbody.appendChild(tr);
   });
 
-  document.getElementById("muni-count").textContent = `（上位50件 / 全${filteredMunicipalities().length.toLocaleString()}自治体）`;
+  document.getElementById("muni-count").textContent =
+    `（上位50件 / 全${filteredMunicipalities().filter(m => m.total_reviews > 0).length.toLocaleString()}自治体）`;
+
+  // ソートアイコン更新
+  document.querySelectorAll(".sortable").forEach((th) => {
+    const icon = th.querySelector(".sort-icon");
+    if (th.dataset.col === col) {
+      icon.textContent = dir === "asc" ? "↑" : "↓";
+      th.classList.add("sort-active");
+    } else {
+      icon.textContent = "↕";
+      th.classList.remove("sort-active");
+    }
+  });
 }
+
+// ソートヘッダーのクリックイベントを登録（DOM構築後に呼ぶ）
+function initTableSort() {
+  document.querySelectorAll(".sortable").forEach((th) => {
+    th.addEventListener("click", () => {
+      const col = th.dataset.col;
+      if (sortState.col === col) {
+        sortState.dir = sortState.dir === "asc" ? "desc" : "asc";
+      } else {
+        sortState.col = col;
+        sortState.dir = "desc";
+      }
+      renderMunicipalityTable();
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initTableSort);
