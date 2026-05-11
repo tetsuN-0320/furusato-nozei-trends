@@ -2,7 +2,8 @@
 
 楽天ウェブサービス（楽天ふるさと納税API）と総務省「ふるさと納税に関する現況調査」を組み合わせた、返礼品市場のインタラクティブ分析ダッシュボード。
 
-**公開URL**: （GitHub Pages 公開後に記載）
+**公開URL**: 
+https://tetsun-0320.github.io/furusato-nozei-trends/
 
 ---
 
@@ -83,7 +84,7 @@ furusato-nozei-trends/
 ├── data/            # データファイル（.gitignore 対象）
 ├── notebooks/       # 分析Jupyter Notebook
 ├── src/             # Pythonソースコード
-├── web/             # ダッシュボード（HTML/CSS/JS）
+├── docs/             # ダッシュボード（HTML/CSS/JS）
 ├── tests/           # テストコード
 └── scripts/         # CLIスクリプト
 ```
