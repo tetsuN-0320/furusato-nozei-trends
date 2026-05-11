@@ -69,6 +69,7 @@ Thumbs.db
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+test_env.py
 
 # === Claude code関係 ===
 claude_code/
