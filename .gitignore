@@ -69,3 +69,9 @@ Thumbs.db
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+
+# === Claude code関係 ===
+claude_code/
+CLAUDE.md
+Project2_furusato_implementation_plan.md
+
